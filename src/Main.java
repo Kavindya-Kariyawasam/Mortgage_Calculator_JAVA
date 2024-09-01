@@ -3,10 +3,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        final byte monthsPerYear = 12;
-
-        int principleAmount = 0, numberOfPayments = 0;
-        float monthlyInterestRatePercentage = 0;
+        int principleAmount = 0;
+        float annualInterestRate = 0;
+        byte period = 0;
 
         Scanner scanner = new Scanner(System.in);
 
@@ -20,27 +19,32 @@ public class Main {
 
         while (true) {
             System.out.print("Annual interest rate: ");
-            float annualInterestRate = scanner.nextFloat();
-            if (annualInterestRate<=30 && annualInterestRate>=1) {
-                monthlyInterestRatePercentage = annualInterestRate/monthsPerYear/100;
+            annualInterestRate = scanner.nextFloat();
+            if (annualInterestRate<=30 && annualInterestRate>=1)
                 break;
-            }
             System.out.println("Enter a value between 1 and 30");
         }
 
         while (true) {
             System.out.print("Period(Years): ");
-            byte period = scanner.nextByte();
-            if (period>=1 && period<=30) {
-                numberOfPayments = period * monthsPerYear;
+            period = scanner.nextByte();
+            if (period>=1 && period<=30)
                 break;
-            }
             System.out.println("Enter a value between 1 and 30");
         }
 
-        double calculatedTotal = (principleAmount * monthlyInterestRatePercentage * Math.pow((1 + monthlyInterestRatePercentage), numberOfPayments))/(Math.pow((1 + monthlyInterestRatePercentage), numberOfPayments)-1);
+        double mortgage = calculateMortgage(principleAmount, annualInterestRate, period);
 
-        String Mortgage = NumberFormat.getCurrencyInstance().format(calculatedTotal);
-        System.out.println("Mortgage: " + Mortgage);
+        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
+        System.out.println("Mortgage: " + mortgageFormatted);
+    }
+
+    public static double calculateMortgage(int principleAmount, float annualInterestRate, byte years) {
+        final byte monthsPerYear = 12;
+
+        int numberOfPayments = years * monthsPerYear;
+        float monthlyInterestRatePercentage = annualInterestRate/monthsPerYear/100;
+
+        return  (principleAmount * monthlyInterestRatePercentage * Math.pow((1 + monthlyInterestRatePercentage), numberOfPayments))/(Math.pow((1 + monthlyInterestRatePercentage), numberOfPayments)-1);
     }
 }
