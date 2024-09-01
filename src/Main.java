@@ -3,40 +3,28 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int principleAmount = 0;
-        float annualInterestRate = 0;
-        byte period = 0;
-
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            System.out.print("Enter principle amount($1K - $1M): ");
-            principleAmount = scanner.nextInt();
-            if (principleAmount>1_000 && principleAmount<1_000_000)
-                break;
-            System.out.println("Enter a value between 1,000 and 1,000,000");
-        }
-
-        while (true) {
-            System.out.print("Annual interest rate: ");
-            annualInterestRate = scanner.nextFloat();
-            if (annualInterestRate<=30 && annualInterestRate>=1)
-                break;
-            System.out.println("Enter a value between 1 and 30");
-        }
-
-        while (true) {
-            System.out.print("Period(Years): ");
-            period = scanner.nextByte();
-            if (period>=1 && period<=30)
-                break;
-            System.out.println("Enter a value between 1 and 30");
-        }
+        int principleAmount = (int) readNumber("Enter principle amount($1K - $1M): ", 1_000, 1_000_000);
+        float annualInterestRate = (float) readNumber("Annual interest rate: ", 1, 30);
+        byte period = (byte) readNumber("Period(Years): ", 1, 30);
 
         double mortgage = calculateMortgage(principleAmount, annualInterestRate, period);
 
         String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
         System.out.println("Mortgage: " + mortgageFormatted);
+    }
+
+    public static double readNumber(String prompt, double min, double max) {
+        Scanner scanner = new Scanner(System.in);
+        double value;
+
+        while (true) {
+            System.out.print(prompt);
+            value = scanner.nextDouble();
+            if (value>=min && value<=max)
+                break;
+            System.out.println("Enter a value between " + min + " and " +max);
+        }
+        return value;
     }
 
     public static double calculateMortgage(int principleAmount, float annualInterestRate, byte years) {
