@@ -3,16 +3,24 @@ package com.mortgageCalculator;
 import java.text.NumberFormat;
 
 public class MortgageReport {
-    public static void printMortgage(int principleAmount, float annualInterestRate, byte period) {
-        double mortgage = Main.calculateMortgage(principleAmount, annualInterestRate, period);
-        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
-        System.out.println("\nMORTGAGE\n--------\nMonthly payments: " + mortgageFormatted);
+
+    private MortgageCalculation calculator;
+
+    public MortgageReport(MortgageCalculation calculator) {
+        this.calculator = calculator;
     }
-    public static void printPaymentSchedule(byte period, int principleAmount, float annualInterestRate) {
+
+    public void printPaymentSchedule() {
         System.out.println("\nPAYMENT SCHEDULE\n----------------\n");
-        for (short month = 1; month <= period * Main.monthsPerYear; month++) {
-            double balance = Main.calculateBalance(principleAmount, annualInterestRate, period, month);
+        for (short month = 1; month <= calculator.getYears() * Main.monthsPerYear; month++) {
+            double balance = calculator.calculateBalance(month);
             System.out.println(NumberFormat.getCurrencyInstance().format(balance));
         }
+    }
+
+    public void printMortgage() {
+        double mortgage = calculator.calculateMortgage();
+        String mortgageFormatted = NumberFormat.getCurrencyInstance().format(mortgage);
+        System.out.println("\nMORTGAGE\n--------\nMonthly payments: " + mortgageFormatted);
     }
 }

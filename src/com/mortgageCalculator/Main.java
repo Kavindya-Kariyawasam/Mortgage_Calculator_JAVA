@@ -11,26 +11,11 @@ public class Main {
         float annualInterestRate = (float) Console.readNumber("Annual interest rate: ", 1, 30);
         byte period = (byte) Console.readNumber("Period(Years): ", 1, 30);
 
-        MortgageReport.printMortgage(principleAmount, annualInterestRate, period);
-        MortgageReport.printPaymentSchedule(period, principleAmount, annualInterestRate);
+        var calculator = new MortgageCalculation(principleAmount, annualInterestRate, period);
+        var report = new MortgageReport(calculator);
+
+        report.printMortgage();
+        report.printPaymentSchedule();
     }
 
-    public static double calculateBalance(double principleAmount, float annualInterestRate, byte years, short numberOfPaymentsMade) {
-        int numberOfPayments = years * monthsPerYear;
-        float monthlyInterestRatePercentage = annualInterestRate/monthsPerYear/PERCENT;
-
-        double balance = principleAmount *
-                (Math.pow(1+monthlyInterestRatePercentage, numberOfPayments)-Math.pow(1+monthlyInterestRatePercentage, numberOfPaymentsMade))/
-                (Math.pow(1+monthlyInterestRatePercentage, numberOfPayments)-1);
-        return balance;
-    }
-
-    public static double calculateMortgage(double principleAmount, float annualInterestRate, byte years) {
-        int numberOfPayments = years * monthsPerYear;
-        float monthlyInterestRatePercentage = annualInterestRate/monthsPerYear/PERCENT;
-
-        double mortgage =  (principleAmount * monthlyInterestRatePercentage * Math.pow((1 + monthlyInterestRatePercentage), numberOfPayments))/
-                (Math.pow((1 + monthlyInterestRatePercentage), numberOfPayments)-1);
-        return mortgage;
-    }
 }
